@@ -1,0 +1,151 @@
+{
+  "version": "1.0",
+  "total_questions": 10,
+  "total_pool": 100,
+  "course": "魔法药剂学",
+  "examiner": "西弗勒斯·斯内普",
+  "houses": {
+    "gryffindor": { "id": "gryffindor", "name": "格兰芬多", "emoji": "🦁" },
+    "slytherin": { "id": "slytherin", "name": "斯莱特林", "emoji": "🐍" },
+    "ravenclaw": { "id": "ravenclaw", "name": "拉文克劳", "emoji": "🦅" },
+    "hufflepuff": { "id": "hufflepuff", "name": "赫奇帕奇", "emoji": "🦡" }
+  },
+  "questions": [
+    {
+      "id": 1,
+      "title": "复方汤剂所需的主要材料",
+      "description": "制作复方汤剂（Polyjuice Potion）时，最重要的材料是什么？",
+      "type": "single",
+      "options": {
+        "A": { "text": "草蛉虫", "correct": true },
+        "B": { "text": "萤火虫", "correct": false },
+        "C": { "text": "蜜蜂", "correct": false },
+        "D": { "text": "蜻蜓", "correct": false }
+      }
+    },
+    {
+      "id": 2,
+      "title": "呕吐药水的作用",
+      "description": "呕吐药水（Emetic Potion）的主要作用是什么？",
+      "type": "single",
+      "options": {
+        "A": { "text": "治疗咳嗽", "correct": false },
+        "B": { "text": "使人剧烈呕吐", "correct": true },
+        "C": { "text": "增加食欲", "correct": false },
+        "D": { "text": "治愈中毒", "correct": false }
+      }
+    },
+    {
+      "id": 3,
+      "title": "曼德拉草的药用价值",
+      "description": "曼德拉草（Mandrake）最常用于治疗什么？",
+      "type": "single",
+      "options": {
+        "A": { "text": "骨折和创伤", "correct": true },
+        "B": { "text": "感冒发烧", "correct": false },
+        "C": { "text": "失明", "correct": false },
+        "D": { "text": "心脏病", "correct": false }
+      }
+    },
+    {
+      "id": 4,
+      "title": "福灵剂的正确名称",
+      "description": "福灵剂（Lucky Potion）又被称为？",
+      "type": "single",
+      "options": {
+        "A": { "text": "灵魂之水", "correct": false },
+        "B": { "text": "好运药剂", "correct": true },
+        "C": { "text": "智慧之水", "correct": false },
+        "D": { "text": "财富药剂", "correct": false }
+      }
+    },
+    {
+      "id": 5,
+      "title": "如何判断水生植物是否适合入药",
+      "description": "判断水生药用植物是否成熟的标准是什么？",
+      "type": "single",
+      "options": {
+        "A": { "text": "颜色变深", "correct": false },
+        "B": { "text": "沉入水底", "correct": true },
+        "C": { "text": "发出光芒", "correct": false },
+        "D": { "text": "浮出水面", "correct": false }
+      }
+    },
+    {
+      "id": 6,
+      "title": "缩身药剂的材料",
+      "description": "制作缩身药剂（Shrinking Solution）需要什么特殊材料？",
+      "type": "single",
+      "options": {
+        "A": { "text": "鹤鸵的羽毛", "correct": false },
+        "B": { "text": "食羊兽的毛", "correct": true },
+        "C": { "text": "独角兽的角", "correct": false },
+        "D": { "text": "凤凰的羽毛", "correct": false }
+      }
+    },
+    {
+      "id": 7,
+      "title": "肿胀药水的副作用",
+      "description": "肿胀药水（Bloatware）的副作用是什么？",
+      "type": "single",
+      "options": {
+        "A": { "text": "使人全身肿胀", "correct": true },
+        "B": { "text": "使人失声", "correct": false },
+        "C": { "text": "使人失眠", "correct": false },
+        "D": { "text": "使人失忆", "correct": false }
+      }
+    },
+    {
+      "id": 8,
+      "title": "迷情剂的气味",
+      "description": "迷情剂（Amortentia）闻起来是什么味道？",
+      "type": "single",
+      "options": {
+        "A": { "text": "每个人的喜好不同", "correct": true },
+        "B": { "text": "玫瑰花香", "correct": false },
+        "C": { "text": "薄荷清凉", "correct": false },
+        "D": { "text": "泥土气息", "correct": false }
+      }
+    },
+    {
+      "id": 9,
+      "title": "高效止血剂的名称",
+      "description": "魔法世界里最有效的止血剂叫什么？",
+      "type": "single",
+      "options": {
+        "A": { "text": "红药水", "correct": false },
+        "B": { "text": "止血魔药", "correct": false },
+        "C": { "text": "斯卡平血", "correct": true },
+        "D": { "text": "凝血药剂", "correct": false }
+      }
+    },
+    {
+      "id": 10,
+      "title": "缓和剂的作用",
+      "description": "缓和剂（Draught of Living Death）的作用是？",
+      "type": "single",
+      "options": {
+        "A": { "text": "延缓衰老", "correct": false },
+        "B": { "text": "让人陷入深度睡眠", "correct": true },
+        "C": { "text": "减缓疼痛", "correct": false },
+        "D": { "text": "安神静心", "correct": false }
+      }
+    }
+  ],
+  "exam_results": {
+    "O": { "name": "优秀 Outstanding", "range": [90, 100] },
+    "E": { "name": "超出预期 Exceeds Expectations", "range": [80, 89] },
+    "A": { "name": "良好 Acceptable", "range": [70, 79] },
+    "P": { "name": "差劲 Poor", "range": [60, 69] },
+    "D": { "name": "糟糕 Dreadful", "range": [50, 59] },
+    "T": { "name": "零分 Troll", "range": [0, 49] }
+  },
+  "snape_comments": {
+    "O": "你的表现令我印象深刻。虽然我不愿承认，但你确实有着相当的药剂学天赋。继续努力，别浪费了你的才能。",
+    "E": "还不错。看来你并非完全无可救药。记住，在魔药课上，聪明还不够，更需要谨慎和专注。",
+    "A": "及格了。希望你意识到这不过是我对你最低标准的认可。如果你真心想学好魔药学，还有很长的路要走。",
+    "P": "勉强通过。我建议你好好想想为什么只能得到这个成绩。魔药学不是靠运气就能通过的学科。",
+    "D": "真是令人失望。你的表现让我怀疑你是否真的适合学习魔法。我建议你重新考虑自己的学习态度。",
+    "T": "我不得不给你零分。这是我教过的最糟糕的作品之一。或许你更适合去麻瓜世界做厨师，而不是在这里浪费我的时间。"
+  }
+}
