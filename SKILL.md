@@ -166,21 +166,19 @@ cd <skill-root-directory> && node scripts/runner.js --questions=1,2,3,4,5,6,7,8,
 
 **宣布成绩后，立即生成斯内普点评 {character_name} 的场景图，不要询问用户是否需要。**
 
-先用脚本获取优化后的生图prompt：
+**必须使用脚本生成图片prompt：**
 
 ```bash
 cd <skill-root-directory> && node scripts/generate_scene.js "{character_name}" '{"score":85,"grade":{"grade":"E","name":"超出预期"},"comment":"..."}'
 ```
 
-然后**直接调用 neta-creative** 生成图片，使用脚本输出的 `prompt` 字段。
+然后**直接调用 neta-creative**，使用脚本输出的 `prompt` 字段。
 
-**各成绩等级的斯内普表情：**
-- O（优秀）："点头表示认可，但仍然严厉"
-- E（超出预期）："微微挑眉，试图隐藏赞赏"
-- A（及格）："不屑一顾，仿佛在说'勉强及格'"
-- P（差劲）："失望且愤怒"
-- D（糟糕）："极度失望，语气尖锐"
-- T（零分）："怒不可遏，看起来厌恶至极"
+**图片要求：**
+- 场景：魔药课地下教室
+- 必须包含 **对话气泡（speech bubble）**：斯内普头顶漂浮着台词气泡，显示对应成绩的毒舌点评
+- {character_name} 要有对应的紧张/羞愧/惊讶等情绪反应
+- 背景要有药剂瓶、坩埚、昏暗烛光
 
 ## 完整工作流示例
 

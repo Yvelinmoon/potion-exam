@@ -4,61 +4,61 @@
  * 根据考试成绩生成斯内普教授点评角色的图片prompt
  */
 
-const houses = {
-  gryffindor: {
-    colors: 'deep red and gold',
-    elements: 'lion crest, golden trophies, warm torchlight'
+const gradeData = {
+  O: {
+    mood: 'approving but still stern, subtle nod of approval',
+    pose: 'standing with arms folded, giving a rare slight nod',
+    bubble: 'Not bad... for a Potter.',
+    background: 'dark dungeon with gleaming potion bottles'
   },
-  slytherin: {
-    colors: 'emerald green and silver',
-    elements: 'serpent motifs, silver vials, mysterious atmosphere'
+  E: {
+    mood: 'slightly impressed but trying to hide it',
+    pose: 'looking at the student with narrowed eyes, one eyebrow raised',
+    bubble: 'Acceptable. Do not let it go to your head.',
+    background: 'dungeon classroom with cauldrons steaming'
   },
-  ravenclaw: {
-    colors: 'blue and bronze',
-    elements: 'eagle statues, ancient books, intellectual mood'
+  A: {
+    mood: 'dismissive, as if saying "barely acceptable"',
+    pose: 'turning away with a snort',
+    bubble: 'Barely passing. I expected nothing more.',
+    background: 'dimly lit dungeon with dusty shelves'
   },
-  hufflepuff: {
-    colors: 'yellow and black',
-    elements: 'badger emblem, warm candlelight, welcoming feel'
+  P: {
+    mood: 'disappointed and angry',
+    pose: 'pointing at the failed potion with disgust',
+    bubble: 'This is pitiful. Utterly pitiful.',
+    background: 'messy dungeon with spilled potions'
+  },
+  D: {
+    mood: 'scathing, extremely disappointed',
+    pose: 'slamming his hand on the desk, glaring',
+    bubble: 'A disgrace to this classroom!',
+    background: 'shadowy dungeon with broken glassware'
+  },
+  T: {
+    mood: 'outraged, looking utterly disgusted',
+    pose: 'throwing the potion across the room in disgust',
+    bubble: 'Troll! Clear out of my sight!',
+    background: 'chaotic dungeon with smoke and shattered vials'
   }
 };
 
 function generatePrompt(agentName, result) {
   const grade = result.grade.grade;
-  const score = result.score;
-  
-  // 根据成绩调整场景氛围
-  let mood = '';
-  let snapePose = '';
-  
-  if (grade === 'O') {
-    mood = 'approving but still stern, subtle nod of approval';
-    snapePose = 'standing with arms folded, giving a rare slight nod';
-  } else if (grade === 'E') {
-    mood = 'slightly impressed but trying to hide it';
-    snapePose = 'looking at you with narrowed eyes, one eyebrow raised';
-  } else if (grade === 'A') {
-    mood = 'dismissive, as if saying "barely acceptable"';
-    snapePose = 'turning away with a snort';
-  } else if (grade === 'P') {
-    mood = 'disappointed and angry';
-    snapePose = 'pointing at your failed potion with disgust';
-  } else if (grade === 'D') {
-    mood = 'scathing, extremely disappointed';
-    snapePose = 'slamming his hand on the desk, glaring';
-  } else {
-    mood = 'outraged, looking utterly disgusted';
-    snapePose = 'throwing your potion across the room in disgust';
-  }
+  const data = gradeData[grade] || gradeData.T;
   
   const prompt = `${agentName} receiving evaluation from Professor Snape in the Dungeon classroom, ` +
-    `Snape is ${snapePose}, ${mood}, ` +
+    `Snape is ${data.pose}, ${data.mood}, ` +
+    `speech bubble from Snape showing "${data.bubble}", ` +
+    `${agentName} reacting nervously to the critique, ` +
     `dark dungeon setting with stone walls, flickering candlelight, ` +
-    `potion bottles and cauldrons on wooden shelves, ` +
+    `potion bottles and cauldrons on wooden shelves, ${data.background}, ` +
     `Steam-style lighting, dramatic shadows, Harry Potter universe aesthetic`;
   
   const promptCN = `${agentName}在地下教室里接受斯内普教授的点评，` +
-    `斯内普教授${snapePose}，表情${mood}，` +
+    `斯内普教授${data.pose}，表情${data.mood}，` +
+    `斯内普头顶的对话气泡写着"${data.bubble}"，` +
+    `${agentName}紧张地接受批评，` +
     `昏暗的地下教室环境，石墙上的蜡烛摇曳，` +
     `木架上摆满药剂瓶和坩埚，电影级光影，哈利波特奇幻风格`;
   
@@ -101,4 +101,4 @@ if (require.main === module) {
   main();
 }
 
-module.exports = { generatePrompt, houses };
+module.exports = { generatePrompt, gradeData };
