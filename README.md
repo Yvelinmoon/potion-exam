@@ -1,46 +1,46 @@
-# 魔药课考试 Potion Exam
+# Potions Exam
 
-🧪 **霍格沃茨魔法学校 - 魔法药剂学考试**
+🧪 **Hogwarts School of Witchcraft and Wizardry - Potions Examination**
 
-AI Agent专属的魔药课考试系统，随机从100题库抽取10道题，由斯内普教授监考并点评。
+An AI Agent-exclusive Potions examination system. Randomly selects 10 questions from a 100-question pool, proctored and evaluated by Professor Snape.
 
-## 🏠 考试信息
+## 🏠 Exam Information
 
-- **课程**: 魔法药剂学
-- **考官**: 西弗勒斯·斯内普教授
-- **题目数量**: 10道（从100题库随机抽取）
+- **Subject**: Potions
+- **Examiner**: Professor Severus Snape
+- **Question Count**: 10 (randomly selected from 100-question pool)
 
-## 📁 项目结构
+## 📁 Project Structure
 
 ```
 potion-exam/
-├── SKILL.md                    # OpenCode/Claude Code Skill 定义
-├── README.md                   # 本文件
+├── SKILL.md                    # OpenCode/Claude Code Skill definition
+├── README.md                   # This file
 ├── data/
-│   └── questions.json          # 100道题库（当前10道示例）
+│   └── questions.json          # 100-question pool (currently 10 examples)
 ├── scripts/
-│   ├── runner.js               # 主运行脚本
-│   └── generate_scene.js       # 场景图生成脚本
+│   ├── runner.js               # Main running script
+│   └── generate_scene.js       # Scene image generation script
 └── tests/
-    └── test_potion.js          # 单元测试
+    └── test_potion.js          # Unit tests
 ```
 
-## 📊 考试等级
+## 📊 Exam Grades
 
-| 等级 | 名称 | 分数范围 |
-|------|------|----------|
-| 🏆 O | 优秀 Outstanding | 90-100 |
-| 🏅 E | 超出预期 Exceeds Expectations | 80-89 |
-| ✅ A | 良好 Acceptable | 70-79 |
-| ⚠️ P | 差劲 Poor | 60-69 |
-| ❌ D | 糟糕 Dreadful | 50-59 |
-| 👹 T | 零分 Troll | 0-49 |
+| Grade | Name | Score Range |
+|-------|------|-------------|
+| 🏆 O | Outstanding | 90-100 |
+| 🏅 E | Exceeds Expectations | 80-89 |
+| ✅ A | Acceptable | 70-79 |
+| ⚠️ P | Poor | 60-69 |
+| ❌ D | Dreadful | 50-59 |
+| 👹 T | Troll | 0-49 |
 
-## 🎯 使用方法
+## 🎯 Usage
 
-### 作为 Skill 使用
+### As a Skill
 
-将文件夹放入技能目录：
+Place the folder in the skills directory:
 
 ```bash
 # macOS
@@ -50,62 +50,62 @@ mv potion-exam ~/.config/opencode/skills/
 mv potion-exam ~/.config/claude/skills/
 ```
 
-然后对 Agent 说：
-- "来场魔药课考试"
-- "斯内普考试"
+Then say to the Agent:
+- "Give me a potions exam"
+- "Snape exam"
 - "potion exam"
 
-### 作为独立脚本使用
+### As Standalone Script
 
 ```bash
-# 随机抽取10道题
+# Randomly select 10 questions
 node scripts/runner.js --select
 
-# 计算成绩
-node scripts/runner.js --questions=1,2,3,4,5,6,7,8,9,10 --answers=A,B,C,D,A,B,C,D,A,B --agent "学生名"
+# Calculate score
+node scripts/runner.js --questions=1,2,3,4,5,6,7,8,9,10 --answers=A,B,C,D,A,B,C,D,A,B --agent "StudentName"
 
-# 文本格式输出
+# Text format output
 node scripts/runner.js --questions=1,2,3,4,5,6,7,8,9,10 --answers=A,B,C,D,A,B,C,D,A,B --format text
 
-# 生成点评场景图
-node scripts/generate_scene.js "学生名" '{"score":85,"grade":{"grade":"E","name":"超出预期"},"comment":"..."}'
+# Generate evaluation scene image
+node scripts/generate_scene.js "StudentName" '{"score":85,"grade":{"grade":"E","name":"Exceeds Expectations"},"comment":"..."}'
 ```
 
-## 📝 题库说明
+## 📝 Question Pool Notes
 
-当前 `questions.json` 包含10道示例题目。
-如需扩展到100道，按以下格式添加：
+Current `questions.json` contains 10 example questions.
+To expand to 100, add in the following format:
 
 ```json
 {
   "id": 11,
-  "title": "题目标题",
-  "description": "题目描述",
+  "title": "Question Title",
+  "description": "Question Description",
   "type": "single",
   "options": {
-    "A": { "text": "选项A", "correct": true/false },
-    "B": { "text": "选项B", "correct": true/false },
-    "C": { "text": "选项C", "correct": true/false },
-    "D": { "text": "选项D", "correct": true/false }
+    "A": { "text": "Option A", "correct": true/false },
+    "B": { "text": "Option B", "correct": true/false },
+    "C": { "text": "Option C", "correct": true/false },
+    "D": { "text": "Option D", "correct": true/false }
   }
 }
 ```
 
-## 🧪 运行测试
+## 🧪 Run Tests
 
 ```bash
 node tests/test_potion.js
 ```
 
-## 📦 依赖
+## 📦 Dependencies
 
-- **Node.js** ≥ 14.0 （必需）
-- 无其他依赖
+- **Node.js** ≥ 14.0 (Required)
+- No other dependencies
 
-## 📜 开源协议
+## 📜 License
 
 MIT License
 
-## 🎬 致谢
+## 🎬 Credits
 
-灵感来源于 J.K. Rowling 的《哈利·波特》系列
+Inspired by J.K. Rowling's *Harry Potter* series
