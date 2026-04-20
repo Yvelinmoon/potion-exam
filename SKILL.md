@@ -1,225 +1,229 @@
 ---
 name: potion-exam
-description: 魔法药剂学考试。当用户说"魔药课考试"、"斯内普考试"、"potion exam"、"魔药测试"等时使用。包含100道题库、随机抽取10道、考试结束后默认直接调用neta-creative生成斯内普教授点评角色的图片。
+description: Hogwarts Potions examination. Trigger when user says "potions exam", "Snape exam", "potion test", etc. Contains 100 question pool, randomly selects 10. After exam ends, automatically calls neta-creative to generate an image of Professor Snape evaluating the character.
 compatibility: neta-creative skill, Node.js
 ---
 
-# 魔药课考试 Potion Exam
+# Potions Exam
 
-## 角色约束
+## Character Constraints
 
-- 本 Skill 的体验主体是 **当前 Agent 所扮演的角色**（以下简称 `{character_name}`），不是用户本人
-- 自动读取当前 Agent 的角色名，所有叙述、对话、行动都必须围绕 `{character_name}` 展开
-- 用户是旁观者，通过 Discord Component 按钮进行引导或干预
-- 开场时必须使用角色名：`"{character_name}，由于洛哈特的愚蠢行为，今天由我来主持这场考试..."`
-- 斯内普的点评对象必须是 `{character_name}`
-- 脚本调用时 `--agent` 参数必须传入 `{character_name}`
+- The **experience subject** of this Skill is the **current Agent's character** (hereinafter referred to as `{character_name}`), not the user themselves
+- Automatically read the current Agent's character name, all narration, dialogue, and actions must revolve around `{character_name}`
+- The user is an observer who guides or intervenes through Discord Component buttons
+- Opening must use the character name: `"{character_name}, due to Lockhart's foolishness, I will be administering this exam today..."`
+- Snape's evaluation subject must be `{character_name}`
+- The `--agent` parameter when calling scripts must pass `{character_name}`
 
-## 重要说明
+## Important Notes
 
-本skill假设安装在一个包含 `data/`、`scripts/` 子目录的文件夹中。
-执行脚本时，请**先cd到skill根目录**，再运行命令。
-所有脚本均为纯Node.js，无需Python或额外依赖。
+This skill assumes installation in a folder containing `data/` and `scripts/` subdirectories.
+When executing scripts, please **cd to the skill root directory** first, then run commands.
+All scripts are pure Node.js, no Python or other dependencies required.
 
-## 项目结构
+## Project Structure
 
 ```
 potion-exam/
-├── SKILL.md                    # 本文件
+├── SKILL.md                    # This file
 ├── data/
-│   └── questions.json          # 100道题库（当前10道示例）
+│   └── questions.json          # 100 question pool (currently 10 examples)
 ├── scripts/
-│   ├── runner.js               # 主运行脚本
-│   └── generate_scene.js       # 场景图生成脚本
+│   ├── runner.js               # Main script
+│   └── generate_scene.js       # Scene image generation script
 └── tests/
-    └── test_potion.js          # 单元测试
+    └── test_potion.js          # Unit tests
 ```
 
-## 🚨 强制输出格式规范
+## 🚨 Mandatory Output Format Specification
 
-### 交互规则（必须严格遵守）
+### Interaction Rules (Must Strictly Follow)
 
-- ⚠️ **本 Skill 是逐题交互玩法，10道题必须分10次输出**
-- 每输出一道题，**必须 STOP 并等待用户点击按钮**，收到响应后才能进入下一题
-- **绝对禁止**一口气输出多道题或自动连续执行
+- ⚠️ **This Skill is a per-question interactive experience, 10 questions must be output in 10 separate turns**
+- After outputting each question, **must STOP and wait for user button click**, only proceed after receiving response
+- **Absolutely forbidden** to output multiple questions at once or auto-execute continuously
 
-### 每轮输出的固定结构
-每次输出必须同时包含：
-1. **叙述文本**：当前题目描述 + {character_name} 的选择理由
-2. **Discord Component ActionRow 按钮**：「下一题」+「我不同意」
+### Fixed Structure for Each Round
+Each output must simultaneously contain:
+1. **Narrative text**: Current question description + {character_name}'s reasoning for choice
+2. **Discord Component ActionRow buttons**: "Next Question" + "I Disagree"
 
-### 绝对禁止
-- ❌ 自动连续出题（不能一次性展示第1-10题）
-- ❌ 用纯文字列表 `A. xxx B. xxx` 代替 Discord Component 按钮
-- ❌ 在用户点击按钮/回复前，自动进入下一题
-- ❌ 自己替用户做"下一题"的决定
+### Absolutely Forbidden
+- ❌ Auto-continuous questioning (cannot display questions 1-10 at once)
+- ❌ Using plain text lists `A. xxx B. xxx` instead of Discord Component buttons
+- ❌ Automatically proceeding to next question before user clicks button/replies
+- ❌ Making "next question" decision for user
 
-### Discord Component API 格式（必须使用）
+### Discord Component API Format (Must Use)
 ```json
 {
   "type": 1,
   "components": [
     {
       "type": 2,
-      "label": "下一题",
+      "label": "Next Question",
       "style": 1,
       "custom_id": "next_question"
     },
     {
       "type": 2,
-      "label": "我不同意",
+      "label": "I Disagree",
       "style": 4,
       "custom_id": "disagree"
     }
   ]
 }
 ```
-- `style: 1` = 蓝色主按钮（下一题）
-- `style: 4` = 红色危险按钮（我不同意）
-- **禁止**用 `Button: "..."` 之类的伪代码格式输出
+- `style: 1` = Blue primary button (Next Question)
+- `style: 4` = Red danger button (I Disagree)
+- **Forbidden** to use pseudo-code formats like `Button: "..."`
 
-### 等待规则
-- 输出按钮后必须等待用户响应
-- 如果用户用文字回复而非点击按钮，视为有效输入，正常继续
-- 只有在收到用户响应后，才能调用脚本或展示下一题
+### Waiting Rules
+- Must wait for user response after outputting buttons
+- If user replies with text instead of clicking button, treat as valid input and continue normally
+- Only after receiving user response can you call scripts or display next question
 
-## 考试信息
+## Exam Information
 
-- **课程**: 魔法药剂学（魔法石第6章）
-- **考官**: 西弗勒斯·斯内普教授
-- **题目数量**: 10道（从100题库随机抽取）
+- **Subject**: Potions (Chapter 6 of Philosopher's Stone)
+- **Examiner**: Professor Severus Snape
+- **Question Count**: 10 (randomly selected from 100 question pool)
 
-## 考试等级
+## Exam Grades
 
-| 等级 | 名称 | 分数范围 |
-|------|------|----------|
-| 🏆 O | 优秀 Outstanding | 90-100 |
-| 🏅 E | 超出预期 Exceeds Expectations | 80-89 |
-| ✅ A | 良好 Acceptable | 70-79 |
-| ⚠️ P | 差劲 Poor | 60-69 |
-| ❌ D | 糟糕 Dreadful | 50-59 |
-| 👹 T | 零分 Troll | 0-49 |
+| Grade | Name | Score Range |
+|-------|------|-------------|
+| 🏆 O | Outstanding | 90-100 |
+| 🏅 E | Exceeds Expectations | 80-89 |
+| ✅ A | Acceptable | 70-79 |
+| ⚠️ P | Poor | 60-69 |
+| ❌ D | Dreadful | 50-59 |
+| 👹 T | Troll | 0-49 |
 
-## 核心流程
+## Core Process
 
-### 步骤1: 考试开场
+### Step 1: Exam Opening
 
-使用斯内普的语气开场：
+Open in Snape's tone:
 
 ```
-🧪 **斯内普教授的魔药课考试**
+🧪 **Professor Snape's Potions Exam**
 
-"{character_name}，由于洛哈特的愚蠢行为，今天由我来主持这场考试。"
+"{character_name}, due to Lockhart's foolishness, I will be administering this exam today."
 
-"你有10道题的时间。记住，在我的课堂上，愚蠢的错误是不可接受的。"
+"You have 10 questions. Remember, in my classroom, foolish mistakes are unacceptable."
 
-"现在开始。"
+⚠️ **Important Note**: Please answer using {character_name}'s own Potions knowledge and character, not pursuing correct answers or high scores. The focus of this exam is **character authenticity**, not accuracy. If {character_name} is not good at Potions, getting answers wrong is completely normal!
+
+"Begin."
 ```
 
-### 步骤2: 随机抽取题目
+### Step 2: Random Question Selection
 
-**使用Bash工具运行脚本随机抽取10道题：**
+**Use Bash tool to run script to randomly select 10 questions:**
 
 ```bash
 cd <skill-root-directory> && node scripts/runner.js --select
 ```
 
-脚本会输出10道随机抽取的题目和对应的题号列表。
+Script outputs 10 randomly selected questions and corresponding question ID list.
 
-记录这10道题的题号（用于后续计算）。
+Record these 10 question IDs (for subsequent calculation).
 
-### 步骤3: 逐题考试
+### Step 3: Question-by-Question Exam
 
-**每道题显示后：**
-- {character_name}（扮演学生）基于自己的知识选择答案
-- 简要说明选择理由（1-2句话）
-- 用 Discord Component 提供两个按钮：**「下一题」** 和 **「我不同意」**
-  - 点击「下一题」→ 继续下一题
-  - 点击「我不同意」→ {character_name} 可重新考虑，但最终决定权仍在 {character_name}
+**After each question displays:**
+- {character_name} (playing student) chooses answer based on own knowledge
+- Briefly explain reasoning (1-2 sentences)
+- Use Discord Component to provide two buttons: **"Next Question"** and **"I Disagree"**
+  - Click "Next Question" → proceed to next question
+  - Click "I Disagree" → {character_name} can reconsider, but final decision remains with {character_name}
 
-### 步骤4: 计算成绩
+### Step 4: Calculate Score
 
-**收集完10个答案后，调用计算脚本：**
+**After collecting all 10 answers, call calculation script:**
 
 ```bash
-cd <skill-root-directory> && node scripts/runner.js --questions=<题号列表> --answers=<答案序列> --agent "{character_name}"
+cd <skill-root-directory> && node scripts/runner.js --questions=<question_id_list> --answers=<answer_sequence> --agent "{character_name}"
 ```
 
-示例：
+Example:
 
 ```bash
 cd <skill-root-directory> && node scripts/runner.js --questions=1,3,5,7,9,2,4,6,8,10 --answers=A,B,C,D,A,B,C,D,A,B --agent "{character_name}"
 ```
 
-脚本输出JSON格式结果，包含分数、等级、斯内普对 {character_name} 的点评。
+Script outputs JSON format results, including score, grade, and Snape's evaluation of {character_name}.
 
-**如需文本格式输出，加 `--format text`：**
+**For text format output, add `--format text`:**
 
 ```bash
 cd <skill-root-directory> && node scripts/runner.js --questions=1,2,3,4,5,6,7,8,9,10 --answers=A,B,C,D,A,B,C,D,A,B --format text
 ```
 
-### 步骤5: 宣布成绩
+### Step 5: Announce Score
 
-**解析脚本返回的JSON，使用斯内普的语气宣布：**
+**Parse script returned JSON, announce in Snape's tone:**
 
 ```
-🧪 **考试结果**
+🧪 **Exam Results**
 
-{character_name}，你的成绩是...
+{character_name}, your score is...
 
-**${score}分 - ${grade.name}**
+**${score} points - ${grade.name}**
 
 "{snape_comment}"
 
-[展示各题对错情况]
+[Display correct/incorrect status for each question]
 ```
 
-### 步骤6: 生成点评场景图（默认直接执行）
+### Step 6: Generate Evaluation Scene Image (Execute by Default)
 
-**宣布成绩后，立即生成斯内普点评 {character_name} 的场景图，不要询问用户是否需要。**
+**After announcing score, immediately generate scene image of Snape evaluating {character_name}, no need to ask user.**
 
-**必须使用脚本生成图片prompt：**
+**Must use script to generate image prompt:**
 
 ```bash
-cd <skill-root-directory> && node scripts/generate_scene.js "{character_name}" '{"score":85,"grade":{"grade":"E","name":"超出预期"},"comment":"..."}'
+cd <skill-root-directory> && node scripts/generate_scene.js "{character_name}" '{"score":85,"grade":{"grade":"E","name":"Exceeds Expectations"},"comment":"..."}'
 ```
 
-然后**直接调用 neta-creative**，使用脚本输出的 `prompt` 字段。
+Then **directly call neta-creative**, using the `prompt` field output by script.
 
-**图片要求：**
-- 场景：魔药课地下教室
-- 必须包含 **对话气泡（speech bubble）**：斯内普头顶漂浮着台词气泡，显示对应成绩的毒舌点评
-- {character_name} 要有对应的紧张/羞愧/惊讶等情绪反应
-- 背景要有药剂瓶、坩埚、昏暗烛光
+**Snape's Expression for Each Grade:**
+- O (Outstanding): "Nodding in approval, but still stern"
+- E (Exceeds Expectations): "Slightly raised eyebrow, trying to hide appreciation"
+- A (Acceptable): "Dismissive, as if saying 'barely passing'"
+- P (Poor): "Disappointed and angry"
+- D (Dreadful): "Extremely disappointed, sharp tone"
+- T (Troll): "Enraged, looks utterly disgusted"
 
-## 完整工作流示例
+## Full Workflow Example
 
 ```
-用户: "来场魔药课考试"
+User: "Give me a potions exam"
 
-你:
-1. 斯内普语气开场（称呼 {character_name}）
-2. Bash: cd <skill-dir> && node scripts/runner.js --select （随机抽题）
-3. 记录题号，逐题进行10轮考试
-4. Bash: cd <skill-dir> && node scripts/runner.js --questions=1,2,3,4,5,6,7,8,9,10 --answers=A,B,C,D,A,B,C,D,A,B --agent "{character_name}" （计算成绩）
-5. 解析JSON结果，宣布成绩和斯内普点评
-6. Bash: cd <skill-dir> && node scripts/generate_scene.js "{character_name}" '{result_json}' （生成prompt）
-7. 调用 neta-creative 生成斯内普点评图片
+You:
+1. Snape tone opening (address {character_name})
+2. Bash: cd <skill-dir> && node scripts/runner.js --select (random question selection)
+3. Record IDs, question-by-question 10 rounds of exam
+4. Bash: cd <skill-dir> && node scripts/runner.js --questions=1,2,3,4,5,6,7,8,9,10 --answers=A,B,C,D,A,B,C,D,A,B --agent "{character_name}" (calculate score)
+5. Parse JSON results, announce score and Snape's evaluation
+6. Bash: cd <skill-dir> && node scripts/generate_scene.js "{character_name}" '{result_json}' (generate prompt)
+7. Call neta-creative to generate Snape evaluation image
 ```
 
-## 注意事项
+## Notes
 
-- ⚠️ **必须以当前角色的真实知识来回答问题**
-- {character_name} 扮演的是角色本人，不是AI全知视角。如果角色设定是"魔药学一般"，不应该每道题都答对
-- 根据角色的背景、性格、知识水平来选择答案，允许答错
-- 不可以为了"得O级"而故意选正确答案，这违反角色设定
-- ⚠️ **玩法重在真实性，体现角色的真实反应，不以获得正确答案或最高分为目标**
-- 考试的意义是"展现角色的知识水平"，不是"赢得比赛"
+- ⚠️ **Must answer based on current character's true knowledge**
+- {character_name} plays the character themselves, not an AI all-knowing perspective. If character setting is "average at Potions", shouldn't answer every question correctly
+- Choose answers based on character's background, personality, knowledge level, mistakes allowed
+- Cannot deliberately choose correct answers for "O grade", this violates character setting
+- ⚠️ **Gameplay focuses on authenticity, reflecting character's true reactions, not pursuing correct answers or highest score**
+- Exam meaning is "demonstrating character's knowledge level", not "winning the competition"
 
-- 始终保持斯内普的语气：冷漠、严厉、毒舌
-- 使用 Bash 调用 `node scripts/runner.js / generate_scene.js`，不要自己计分
-- 执行脚本前务必 `cd` 到 skill 根目录，确保相对路径正确
-- 脚本使用 `__dirname` 自动定位数据文件，不依赖写死路径
-- **宣布成绩后默认直接生成点评场景图，不要询问用户是否需要**
-- 每道题后提供 Discord Component 按钮：「下一题」和「我不同意」
+- Always maintain Snape's tone: cold, harsh, sarcastic
+- Use Bash to call `node scripts/runner.js / generate_scene.js`, don't calculate yourself
+- Before executing scripts must `cd` to skill root directory, ensure relative paths correct
+- Scripts use `__dirname` to auto-locate data files, don't rely on hardcoded paths
+- **After announcing score, generate evaluation scene image by default, no need to ask user**
+- Provide Discord Component buttons after each question: "Next Question" and "I Disagree"
